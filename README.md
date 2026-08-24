@@ -4,7 +4,7 @@
 
 [Скачать приложение для Windows](https://github.com/semenitto/ld2450-radar-monitor/releases/latest/download/LD2450-Monitor.exe) · [Скачать готовую прошивку](https://github.com/semenitto/ld2450-radar-monitor/releases/latest/download/ld2450_radar_esp32_complete.bin) · [Все выпуски](https://github.com/semenitto/ld2450-radar-monitor/releases)
 
-![LD2450 Monitor — квадратный план помещения](audit/04-room-map.png)
+![LD2450 Monitor — квадратный план помещения](audit/05-readme-interface.png)
 
 ## Возможности
 
@@ -164,7 +164,7 @@ pyinstaller --noconfirm --clean LD2450-Monitor-v2.spec
 ├── pc_app/test_ld2450_monitor_v2.py   тесты обработки данных
 ├── pc_app/LD2450-Monitor-v2.spec      конфигурация PyInstaller
 ├── pc_app/requirements.txt            зависимости Python
-├── audit/04-room-map.png              снимок актуального интерфейса
+├── audit/05-readme-interface.png      главный снимок интерфейса для README
 └── design-qa.md                       результаты визуальной проверки
 ```
 

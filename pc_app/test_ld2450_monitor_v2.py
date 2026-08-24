@@ -9,6 +9,7 @@ from ld2450_monitor_v2 import (
     HistoryStore,
     Target,
     ZoneRect,
+    _windows_colorref,
     load_calibration,
     migrate_legacy_history,
     parse_data_line,
@@ -21,6 +22,9 @@ from ld2450_monitor_v2 import (
 
 
 class MonitorLogicTests(unittest.TestCase):
+    def test_windows_colorref_conversion(self):
+        self.assertEqual(_windows_colorref("#123456"), 0x563412)
+
     def test_parse_frame(self):
         line = "LD2450_DATA,1000,42,1,-500,2000,12,60,1,1200,3200,-5,60,0,0,0,0,0"
         frame = parse_data_line(line)

@@ -9,6 +9,7 @@ import sys
 import threading
 import time
 import tkinter as tk
+import ctypes
 from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -50,6 +51,52 @@ RUS_MONTHS = (
     "января", "февраля", "марта", "апреля", "мая", "июня",
     "июля", "августа", "сентября", "октября", "ноября", "декабря",
 )
+
+
+def _windows_colorref(hex_color: str) -> int:
+    """Convert #RRGGBB to the COLORREF byte order used by Windows."""
+    red = int(hex_color[1:3], 16)
+    green = int(hex_color[3:5], 16)
+    blue = int(hex_color[5:7], 16)
+    return red | (green << 8) | (blue << 16)
+
+
+def apply_windows_chrome(root: tk.Tk) -> None:
+    """Tint the native Windows frame while keeping resize, snap and accessibility."""
+    if sys.platform != "win32":
+        return
+    try:
+        root.update_idletasks()
+        child_handle = root.winfo_id()
+        window_handle = ctypes.windll.user32.GetParent(child_handle) or child_handle
+        dwm = ctypes.windll.dwmapi
+
+        enabled = ctypes.c_int(1)
+        for attribute in (20, 19):
+            result = dwm.DwmSetWindowAttribute(
+                window_handle,
+                attribute,
+                ctypes.byref(enabled),
+                ctypes.sizeof(enabled),
+            )
+            if result == 0:
+                break
+
+        for attribute, color in (
+            (34, MUTED_TEAL),
+            (35, BG),
+            (36, CREAM),
+        ):
+            value = ctypes.c_uint(_windows_colorref(color))
+            dwm.DwmSetWindowAttribute(
+                window_handle,
+                attribute,
+                ctypes.byref(value),
+                ctypes.sizeof(value),
+            )
+    except (AttributeError, OSError, ValueError):
+        # Unsupported Windows versions simply keep their native title bar.
+        pass
 
 
 @dataclass(frozen=True)
@@ -480,6 +527,7 @@ class MonitorApp:
 
         self._configure_styles()
         self._build_ui()
+        apply_windows_chrome(self.root)
         if demo:
             self._start_demo()
         else:
