@@ -1,0 +1,13 @@
+.pio/
+__pycache__/
+*.py[cod]
+*.exe
+*.bin
+pc_app/build_*/
+pc_app/dist_*/
+.venv/
+.idea/
+.vscode/
+*.db
+settings.json
+Thumbs.db
